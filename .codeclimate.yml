@@ -1,0 +1,14 @@
+engines:
+  checkstyle:
+    enabled: false
+    channel: beta
+  fixme:
+    enabled: true
+  pmd:
+    enabled: true
+    channel: beta
+ratings:
+  paths:
+  - "src/main/java/**.java"
+exclude_paths:
+  - "src/test/java/**.java"
