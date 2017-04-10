@@ -41,18 +41,28 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public User fetchUser(final String sessionId) {
-        User user = jedisService.doJedis(jedis -> {
-            String userJson = jedis.get("demo:sessionid:" + sessionId);
-            if (userJson == null) {
-                return null;
-            }
-            try {
-                return objectMapper.readValue(userJson, User.class);
-            } catch (IOException e) {
-                log.error("parse user obj failed", e);
-                return null;
-            }
-        }, jedisPool);
+        User user;
+        try {
+            user = jedisService.doJedis(jedis -> {
+                String userJson = jedis.get("demo:sessionid:" + sessionId);
+                if (userJson == null) {
+                    return null;
+                }
+                try {
+                    return objectMapper.readValue(userJson, User.class);
+                } catch (IOException e) {
+                    log.error("parse user obj failed", e);
+                    return null;
+                }
+            }, jedisPool);
+        } catch (Exception e) {
+            log.error("fetch user in redis failed", e);
+            user = null;
+        }
+
+        if (user != null) {
+            return user;
+        }
         return user;
     }
 }

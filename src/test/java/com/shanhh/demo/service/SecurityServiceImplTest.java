@@ -1,6 +1,7 @@
 package com.shanhh.demo.service;
 
 import com.shanhh.demo.bean.User;
+import com.shanhh.demo.jedis.CacheException;
 import com.shanhh.demo.jedis.JedisCallback;
 import com.shanhh.demo.jedis.JedisService;
 
@@ -14,6 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import redis.clients.jedis.JedisPool;
 
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -57,9 +59,19 @@ public class SecurityServiceImplTest {
 
         when(jedisService.doJedis(any(JedisCallback.class), any(JedisPool.class))).thenReturn(user);
         User result = securityService.fetchUser(sessionId);
+
         assertThat(result.getEmail(), is(user.getEmail()));
         assertThat(result.getNickname(), is(user.getNickname()));
+    }
 
+    @Test
+    public void fetchUser_redisFailed() {
+        String sessionId = "sessionId";
+
+        when(jedisService.doJedis(any(JedisCallback.class), any(JedisPool.class))).thenThrow(new CacheException("failed"));
+
+        User result = securityService.fetchUser(sessionId);
+        assertNull(result);
     }
 
 }
