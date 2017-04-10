@@ -1,8 +1,14 @@
 package com.shanhh.demo.controller;
 
+import com.shanhh.demo.bean.User;
+import com.shanhh.demo.service.SecurityService;
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -14,14 +20,22 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 @RequestMapping("security")
 public class SecurityController {
 
+    @Resource
+    private SecurityService securityService;
+
     @RequestMapping(value = "signin", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String signIn() {
-        return "";
+    public User signIn(
+            @RequestParam String email,
+            @RequestParam String password) {
+        return securityService.signIn(email, password);
     }
 
     @RequestMapping(value = "signup", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public String signUp() {
-        return "";
+    public User signUp(
+            @RequestParam String email,
+            @RequestParam String password,
+            @RequestParam String nickname) {
+        return securityService.signUp(email, password, nickname);
     }
 
 }
