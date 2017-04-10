@@ -9,4 +9,5 @@ import com.shanhh.demo.bean.User;
 public interface SecurityService {
     User signIn(String email, String password);
     User signUp(String email, String password, String nickname);
+    User fetchUser(String sessionId);
 }

@@ -4,6 +4,7 @@ import com.shanhh.demo.bean.User;
 import com.shanhh.demo.service.SecurityService;
 
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,6 +37,11 @@ public class SecurityController {
             @RequestParam String password,
             @RequestParam String nickname) {
         return securityService.signUp(email, password, nickname);
+    }
+
+    @RequestMapping(value = "info", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public User fetchUser(@CookieValue("session_id") String sessionId) {
+        return securityService.fetchUser(sessionId);
     }
 
 }
