@@ -2,13 +2,11 @@ package com.shanhh.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shanhh.demo.bean.User;
-import com.shanhh.demo.jedis.JedisService;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
-
-import redis.clients.jedis.JedisPool;
 
 import java.io.IOException;
 
@@ -23,11 +21,10 @@ import javax.annotation.Resource;
 public class SecurityServiceImpl implements SecurityService {
 
     @Resource
-    private JedisService jedisService;
-    @Resource
-    private JedisPool jedisPool;
-    @Resource
     private ObjectMapper objectMapper;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
+
 
     @Override
     public User signIn(String email, String password) {
@@ -43,18 +40,16 @@ public class SecurityServiceImpl implements SecurityService {
     public User fetchUser(final String sessionId) {
         User user;
         try {
-            user = jedisService.doJedis(jedis -> {
-                String userJson = jedis.get("demo:sessionid:" + sessionId);
-                if (userJson == null) {
-                    return null;
-                }
-                try {
-                    return objectMapper.readValue(userJson, User.class);
-                } catch (IOException e) {
-                    log.error("parse user obj failed", e);
-                    return null;
-                }
-            }, jedisPool);
+            String userJson = stringRedisTemplate.opsForValue().get("demo:sessionid:" + sessionId);
+            if (userJson == null) {
+                return null;
+            }
+            try {
+                return objectMapper.readValue(userJson, User.class);
+            } catch (IOException e) {
+                log.error("parse user obj failed", e);
+                return null;
+            }
         } catch (Exception e) {
             log.error("fetch user in redis failed", e);
             user = null;
