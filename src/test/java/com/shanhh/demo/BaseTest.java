@@ -14,7 +14,7 @@ import java.util.UUID;
  * @since 2017-04-11 09:20
  */
 @RunWith(MockitoJUnitRunner.class)
-public class BaseTest {
+public abstract class BaseTest {
 
     protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
