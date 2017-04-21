@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -13,7 +14,7 @@ import java.util.UUID;
  * @author dan
  * @since 2017-04-11 09:20
  */
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public abstract class BaseTest {
 
     protected static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
