@@ -2,7 +2,7 @@ package com.shanhh.demo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shanhh.demo.BaseTest;
-import com.shanhh.demo.bean.User;
+import com.shanhh.demo.bean.dto.User;
 
 import org.junit.Before;
 import org.junit.Test;

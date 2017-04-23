@@ -1,4 +1,4 @@
-package com.shanhh.demo.bean;
+package com.shanhh.demo.bean.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import java.io.Serializable;
  */
 @Data
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "password")
 public class User implements Serializable {
     private String email;
     private String nickname;

@@ -1,6 +1,7 @@
 package com.shanhh.demo.controller;
 
-import com.shanhh.demo.bean.User;
+import com.shanhh.demo.bean.dto.User;
+import com.shanhh.demo.cache.service.UserCache;
 import com.shanhh.demo.service.SecurityService;
 
 import org.springframework.http.MediaType;
@@ -23,16 +24,18 @@ public class SecurityController {
 
     @Resource
     private SecurityService securityService;
+    @Resource
+    private UserCache userCache;
 
     @RequestMapping(value = "signin", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public User signIn(
+    public String signIn(
             @RequestParam String email,
             @RequestParam String password) {
         return securityService.signIn(email, password);
     }
 
     @RequestMapping(value = "signup", method = POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public User signUp(
+    public String signUp(
             @RequestParam String email,
             @RequestParam String password,
             @RequestParam String nickname) {

@@ -1,7 +1,7 @@
 package com.shanhh.demo.mapper;
 
 import com.shanhh.demo.BaseTest;
-import com.shanhh.demo.bean.User;
+import com.shanhh.demo.bean.dto.User;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

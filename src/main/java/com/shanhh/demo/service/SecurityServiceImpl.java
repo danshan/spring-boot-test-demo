@@ -1,14 +1,15 @@
 package com.shanhh.demo.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.shanhh.demo.bean.User;
+import com.google.common.base.Preconditions;
+import com.shanhh.demo.bean.dto.User;
+import com.shanhh.demo.cache.service.UserCache;
+import com.shanhh.demo.mapper.UserMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
@@ -21,43 +22,33 @@ import javax.annotation.Resource;
 public class SecurityServiceImpl implements SecurityService {
 
     @Resource
-    private ObjectMapper objectMapper;
+    private UserCache userCache;
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
-
+    private UserMapper userMapper;
 
     @Override
-    public User signIn(String email, String password) {
-        return null;
+    public String signIn(String email, String password) {
+        User user = userMapper.loadByEmail(email);
+        Preconditions.checkNotNull(user, "user not exists");
+        Preconditions.checkArgument(user.getPassword().equals(password), "email or password incorrect");
+
+        String sessionId = UUID.randomUUID().toString();
+        userCache.saveSession(user, sessionId);
+        return sessionId;
     }
 
     @Override
-    public User signUp(String email, String password, String nickname) {
+    public String signUp(String email, String password, String nickname) {
         return null;
     }
 
     @Override
     public User fetchUser(final String sessionId) {
-        User user;
         try {
-            String userJson = stringRedisTemplate.opsForValue().get("demo:sessionid:" + sessionId);
-            if (userJson == null) {
-                return null;
-            }
-            try {
-                return objectMapper.readValue(userJson, User.class);
-            } catch (IOException e) {
-                log.error("parse user obj failed", e);
-                return null;
-            }
+            return userCache.loadBySessionId(sessionId);
         } catch (Exception e) {
             log.error("fetch user in redis failed", e);
-            user = null;
+            return null;
         }
-
-        if (user != null) {
-            return user;
-        }
-        return user;
     }
 }
