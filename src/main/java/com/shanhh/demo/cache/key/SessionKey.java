@@ -17,7 +17,7 @@ public class SessionKey extends CacheKey {
     @Override
     public String buildKey() {
         return String.format("%s:%s:v:%s:sid:%s",
-                DOMAIN, getClass().getCanonicalName(),
+                DOMAIN, getClass().getCanonicalName(), VERSION,
                 Preconditions.checkNotNull(sessionId)
         );
     }

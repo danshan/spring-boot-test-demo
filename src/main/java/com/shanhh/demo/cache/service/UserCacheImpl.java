@@ -51,7 +51,7 @@ public class UserCacheImpl implements UserCache {
                 .sessionId(sessionId)
                 .build().buildKey();
         try {
-            stringRedisTemplate.opsForValue().set(sessionId, objectMapper.writeValueAsString(user), 1, TimeUnit.DAYS);
+            stringRedisTemplate.opsForValue().set(cacheKey, objectMapper.writeValueAsString(user), 1, TimeUnit.DAYS);
         } catch (JsonProcessingException e) {
             log.error("parse user obj failed", e);
         }

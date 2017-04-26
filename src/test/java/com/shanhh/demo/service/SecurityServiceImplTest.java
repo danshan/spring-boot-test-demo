@@ -3,6 +3,9 @@ package com.shanhh.demo.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shanhh.demo.BaseTest;
 import com.shanhh.demo.bean.dto.User;
+import com.shanhh.demo.cache.service.UserCache;
+import com.shanhh.demo.cache.service.UserCacheImpl;
+import com.shanhh.demo.mapper.UserMapper;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +19,9 @@ import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -33,6 +39,11 @@ public class SecurityServiceImplTest extends BaseTest {
     private ValueOperations valueOperations;
     @Spy
     private ObjectMapper objectMapper = new ObjectMapper();
+    @InjectMocks
+    @Spy
+    private UserCacheImpl userCache;
+    @Mock
+    private UserMapper userMapper;
 
     @Before
     public void beforeMethod() {
@@ -60,6 +71,10 @@ public class SecurityServiceImplTest extends BaseTest {
 
         assertThat(result.getEmail(), is(mockUser.getEmail()));
         assertThat(result.getNickname(), is(mockUser.getNickname()));
+
+        verify(userCache, times(1)).loadBySessionId(any(String.class));
+        verify(userCache, never()).saveSession(any(User.class), any(String.class));
+        verify(userMapper, never()).loadByEmail(any(String.class));
     }
 
     @Test
