@@ -5,7 +5,7 @@ package com.shanhh.demo.mapper;
  * @since 2017-04-21 21:03
  */
 
-import com.shanhh.demo.bean.dto.User;
+import com.shanhh.demo.bean.po.UserPO;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserMapper {
 
-    @Select("SELECT * FROM user WHERE email = #{email} LIMIT 1")
-    User loadByEmail(@Param("email") String email);
+    @Select("SELECT email, nickname, password FROM user WHERE email = #{email} LIMIT 1")
+    UserPO loadByEmail(@Param("email") String email);
 
     @Insert("INSERT INTO user (email, nickname, password) VALUES (#{email}, #{nickname}, #{password})")
     int createUser(@Param("email") String email, @Param("nickname") String nickname, @Param("password") String password);

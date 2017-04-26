@@ -1,7 +1,7 @@
 package com.shanhh.demo.mapper;
 
 import com.shanhh.demo.BaseTest;
-import com.shanhh.demo.bean.dto.User;
+import com.shanhh.demo.bean.po.UserPO;
 
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +29,7 @@ public class UserMapperTest extends BaseTest {
         int affect = userMapper.createUser(email, "nickname", password);
         assertTrue(affect > 0);
 
-        User user = userMapper.loadByEmail(email);
+        UserPO user = userMapper.loadByEmail(email);
         assertThat(user.getEmail(), is(email));
         assertThat(user.getPassword(), is(password));
 

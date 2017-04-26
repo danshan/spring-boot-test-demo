@@ -2,11 +2,13 @@ package com.shanhh.demo.service;
 
 import com.google.common.base.Preconditions;
 import com.shanhh.demo.bean.dto.User;
+import com.shanhh.demo.bean.po.UserPO;
 import com.shanhh.demo.cache.service.UserCache;
 import com.shanhh.demo.mapper.UserMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -28,9 +30,12 @@ public class SecurityServiceImpl implements SecurityService {
 
     @Override
     public String signIn(String email, String password) {
-        User user = userMapper.loadByEmail(email);
-        Preconditions.checkNotNull(user, "user not exists");
-        Preconditions.checkArgument(user.getPassword().equals(password), "email or password incorrect");
+        UserPO userPO = userMapper.loadByEmail(email);
+        Preconditions.checkNotNull(userPO, "user not exists");
+        Preconditions.checkArgument(userPO.getPassword().equals(password), "email or password incorrect");
+
+        User user = new User();
+        BeanUtils.copyProperties(userPO, user);
 
         String sessionId = UUID.randomUUID().toString();
         userCache.saveSession(user, sessionId);
