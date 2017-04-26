@@ -4,7 +4,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - mvn clean -Dmaven.test.falure.ignore=true org.jacoco:jacoco-maven-plugin:report coveralls:report package
+  - mvn clean jacoco:report coveralls:report package
 after_success:
   - mvn sonar:sonar -Dsonar.host.url=https://sonarqube.com -Dsonar.organization=$SONAR_ORG -Dsonar.login=$SONAR_TOKEN
 
